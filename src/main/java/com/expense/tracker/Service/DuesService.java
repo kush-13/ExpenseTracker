@@ -25,5 +25,9 @@ public class DuesService {
 		duesRepository.delete(dues);
 
 	}
+	
+	public Dues getEarliestRepaymentDuesForUser(long userId) {
+		return duesRepository.findTopByUserIdOrderByRepaymentDateAsc(userId);
+	}
 
 }

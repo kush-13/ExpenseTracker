@@ -62,4 +62,26 @@ public class DuesController {
 		return ResponseEntity.ok(String.format("Dues : {}  resolved successfully !", dues));
 
 	}
+	
+	@GetMapping("/settleEarliestRepaymetDue/{userId}")
+	public ResponseEntity<String> settleEarliestRepaymentDues(@PathVariable(name = "userId", required = true) long userId) 
+			throws NoSuchUserException{
+		// check if user exists
+		if (!userHandler.isUserExists(userId))
+			throw new NoSuchUserException(userHandler.notFoundMessage(userId));
+		
+		// get Earliest Repayments Dues
+		Dues dues = duesHandler.getEarliestRepaymentDuesForUser(userId);
+		
+		if (dues==null)
+			ResponseEntity.ok("No Dues left for this user !");
+		
+		// delete dues
+		duesHandler.deleteDues(dues);
+
+		System.out.println("sucessfully deleted the dues :" + dues);
+		return ResponseEntity.ok(String.format("Dues : {}  resolved successfully !", dues));		
+		
+	}
+	
 }
